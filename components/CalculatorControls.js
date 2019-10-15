@@ -3,15 +3,37 @@ controlsTemplate.innerHTML = `
     <style>
         :host {
             display: block;
+            background-color: rgb(220, 218, 221);
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+            padding: 5px;
         }
 
         button {
-            font-family: verdana;
-            color: rgb(72, 100, 60);
-            background-color: rgb(137, 193, 113);
-            width: 30px;
+            width: 40px;
             height: 30px;
+            
             margin: 2.5px;
+            
+            border-radius: 7.5px;
+            outline: none;
+
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+
+            background-color: rgb(150, 150, 150);
+
+            cursor: pointer;
+        }
+
+        button:active {
+            position:relative;
+            top:1px;
+        }
+
+        .num {
+            background-color: rgb(76, 76, 76);
         }
     </style>
     <div id="container"></div>
@@ -26,30 +48,35 @@ class CalculatorControls extends HTMLElement {
 
         this.$container = this._shadowRoot.querySelector('#container');
 
+        this.render();
+    }
+
+    render() {
         const buttonSchema = [
+
             [
                 { val: '1' },
                 { val: '2' },
                 { val: '3' },
-                { val: '+', fn: this.calc.add }
+                { val: '÷', fn: this.calc.div }
             ],
             [
                 { val: '4' },
                 { val: '5' },
                 { val: '6' },
-                { val: '-', fn: this.calc.sub }
+                { val: '×', fn: this.calc.mul }
             ],
             [
                 { val: '7' },
                 { val: '8' },
                 { val: '9' },
-                { val: '×', fn: this.calc.mul }
+                { val: '-', fn: this.calc.sub }
             ],
             [
                 { val: '0' },
                 { val: '.', fn: this.calc.dec },
                 { val: '=', fn: this.calc.sum },
-                { val: '÷', fn: this.calc.div }
+                { val: '+', fn: this.calc.add }
             ],
         ];
 
@@ -59,16 +86,24 @@ class CalculatorControls extends HTMLElement {
 
             for (let b of r) {
                 const button = document.createElement('button');
-
                 const self = this;
 
                 button.innerHTML = b.val;
 
                 if (b.fn) {
+                    if (b.val === '.') {
+                        button.className = 'num';
+                    } else {
+                        button.className = 'op';
+                    }
+
                     button.addEventListener('click', function (e) {
+                        e.target.className += ' activeOperation';
                         b.fn.call(self.calc);
                     });
                 } else {
+                    button.className = 'num';
+
                     button.addEventListener('click', function (e) {
                         self.calc.num(b.val);
                     });

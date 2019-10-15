@@ -3,24 +3,14 @@ appTemplate.innerHTML = `
     <style>
         :host {
             display: inline-block;
-            padding: 3px 10px 10px 10px;
-            border: 1px solid #8a9a7f;
-            border-radius: 3px;
+            background-color: rgb(76, 76, 76);
+            border-radius: 15px;
+            padding: 3px;
             font-family: verdana;
-        }
-
-        #about {
-            font-size: 60%;
-            margin: 4px;
+            min-width: 150px;
         }
     </style>
     <div id="container">
-        <div id="about">
-            Calculator
-            <span style="float: right">
-            v1.0
-            </span>
-        </div>
         <calc-display></calc-display>
         <calc-controls></calc-controls>
     </div>

@@ -2,17 +2,18 @@ class Calculator {
 
     currentValue = '0';
     firstOperand = '';
-    
-    repeatOperation = null;
-    awaitingSecond = false;
+
+    previousOperationType = null;
+    previousSumOperation = null;
+
     operator = null;
 
     constructor(printFn) {
         this.print = printFn;
     }
 
-    add(n1, n2) {
-        return this.setOperator((a, b) => a + b, n1, n2);
+    add() {
+        return this.setOperator((a, b) => a + b);
     }
 
     bindTrailingArgs(fn, ...boundArgs) {
@@ -31,22 +32,22 @@ class Calculator {
         return this;
     }
 
-    div(n1, n2) {
-        return this.setOperator((a, b) => a / b, n1, n2);
+    div() {
+        return this.setOperator((a, b) => a / b);
     }
 
-    exp(n1, n2) {
-        return this.setOperator((a, b) => a ** b, n1, n2);
+    exp() {
+        return this.setOperator((a, b) => a ** b);
     }
 
-    mul(n1, n2) {
-        return this.setOperator((a, b) => a * b, n1, n2);
+    mul() {
+        return this.setOperator((a, b) => a * b);
     }
 
     num(n) {
-        if (this.repeatOperation) {
+        if (this.previousSumOperation) {
             this.currentValue = '' + n;
-            this.repeatOperation = null;
+            this.previousSumOperation = null;
             this.operator = null;
         } else {
             this.currentValue = this.currentValue === '0' ?
@@ -58,47 +59,50 @@ class Calculator {
         return this;
     }
 
-    parse() {
+    parseNumbers() {
         return {
             first: parseFloat(this.firstOperand),
             current: parseFloat(this.currentValue)
         };
     }
 
-    setOperator(op, n1, n2) {
+    setOperator(op) {
+        const isConsecutiveOperation = this.firstOperand && this.currentValue && !this.previousSumOperation;
 
-        if (n1) {
-            this.firstOperand = n1;
-        } else if (!this.repeatOperation) {
+        if (isConsecutiveOperation) {
+            const { first, current } = this.parseNumbers();
+            this.firstOperand = '' + this.operator(first, current);
+            this.print(this.firstOperand);
+        }
+
+        else if (!this.previousSumOperation) {
             this.firstOperand = this.currentValue;
         }
 
-        this.currentValue = n2 ? n2 : '';
-        this.awaitingSecond = !!n1 && !!n2;
-        this.repeatOperation = null;
+        this.currentValue = '';
+        this.previousOperationType = 'op';
+        this.previousSumOperation = null;
         this.operator = op;
 
         return this;
     }
 
-    sub(n1, n2) {
-        return this.setOperator((a, b) => a - b, n1, n2);
+    sub() {
+        return this.setOperator((a, b) => a - b);
     }
 
     sum() {
         if (!this.operator || !this.currentValue) return this;
 
-        this.awaitingSecond = false;
+        const { first, current } = this.parseNumbers();
 
-        const { first, current } = this.parse();
-
-        if (this.repeatOperation) {
-            this.repeatOperation(first)
+        if (this.previousOperationType === 'sum') {
+            this.previousSumOperation(first)
         }
 
+        this.previousSumOperation = this.bindTrailingArgs(this.operator, current);
         this.firstOperand = '' + this.operator(first, current);
-
-        this.repeatOperation = this.bindTrailingArgs(this.operator, current);
+        this.previousOperationType = 'sum';
 
         this.print(this.firstOperand);
 

@@ -3,19 +3,41 @@ displayTemplate.innerHTML = `
     <style>
         :host {
             display: block;
+        }
+
+        #container {
+            background-color: rgb(36, 32, 29);
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            padding: 0 10px 10px 10px;
+        }
+
+        #display {
+            background-color: rgb(198, 188, 187);
+            
             font-family: 'digital-7';
-            background-color: rgb(225, 248, 209);
-            color: rgb(145, 188, 122);
-            margin: 10px 2.5px;
-            padding: 5px;
-            text-align: right;
+            font-weight: bold;
             font-size: 25px;
-            border: 1px solid #8a9a7f;
-            border-radius: 2px;
+            text-align: right;
+            color: rgb(36, 32, 29);
+
+            border: 10px solid rgb(61, 57, 66);
+            border-radius: 7.5px;
+            
+            padding: 3px 5px;
+        }
+
+        #logo {
+            padding: 5px 0;
+            color: white;
+            font-size: 8px;
+            text-align: right;
+            margin-right: 5px;
         }
     </style>
     <div id="container">
-        0
+    <div id="logo">KALKYLATOR v1.0</div>
+    <div id="display">0</div>
     </div>
 `;
 
@@ -26,7 +48,7 @@ class CalculatorDisplay extends HTMLElement {
         this._shadowRoot = this.attachShadow({ 'mode': 'open' });
         this._shadowRoot.appendChild(displayTemplate.content.cloneNode(true));
 
-        this.$container = this._shadowRoot.querySelector('#container');
+        this.$display = this._shadowRoot.querySelector('#display');
     }
 
     connectedCallback() {
@@ -40,7 +62,7 @@ class CalculatorDisplay extends HTMLElement {
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
-        this.$container.innerHTML = newVal;
+        this.$display.innerHTML = newVal;
     }
 
     adoptedCallback() {
