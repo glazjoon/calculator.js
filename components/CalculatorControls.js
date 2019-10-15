@@ -35,6 +35,10 @@ controlsTemplate.innerHTML = `
         .num {
             background-color: rgb(76, 76, 76);
         }
+
+        .clear {
+            background-color: rgb(137, 51, 60);
+        }
     </style>
     <div id="container"></div>
 `;
@@ -53,30 +57,43 @@ class CalculatorControls extends HTMLElement {
 
     render() {
         const buttonSchema = [
-
+            [
+                { val: 'MR', fn: () => { } },
+                { val: 'MC', fn: () => { } },
+                { val: 'M+', fn: () => { } },
+                { val: 'M-', fn: () => { } },
+                { val: 'C', fn: () => { } },
+            ],
             [
                 { val: '1' },
                 { val: '2' },
                 { val: '3' },
-                { val: '÷', fn: this.calc.div }
+                { val: '÷', fn: this.calc.div },
+                { val: 'CE', fn: () => { } },
             ],
             [
                 { val: '4' },
                 { val: '5' },
                 { val: '6' },
-                { val: '×', fn: this.calc.mul }
+                { val: '×', fn: this.calc.mul },
+                { val: '√', fn: () => { } },
+
             ],
             [
                 { val: '7' },
                 { val: '8' },
                 { val: '9' },
-                { val: '-', fn: this.calc.sub }
+                { val: '-', fn: this.calc.sub },
+                { val: 'x²', fn: () => { } },
+
             ],
             [
                 { val: '0' },
                 { val: '.', fn: this.calc.dec },
                 { val: '=', fn: this.calc.sum },
-                { val: '+', fn: this.calc.add }
+                { val: '+', fn: this.calc.add },
+                { val: 'xʸ', fn: () => { } }
+
             ],
         ];
 
@@ -91,10 +108,16 @@ class CalculatorControls extends HTMLElement {
                 button.innerHTML = b.val;
 
                 if (b.fn) {
-                    if (b.val === '.') {
-                        button.className = 'num';
-                    } else {
-                        button.className = 'op';
+                    switch (b.val) {
+                        case '.':
+                            button.className = 'num';
+                            break;
+                        case 'C':
+                        case 'CE':
+                            button.className = 'clear'
+                            break;
+                        default:
+                            button.className = 'op';
                     }
 
                     button.addEventListener('click', function (e) {
