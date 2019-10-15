@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Calculator</title>
+    <style>
+        @font-face {
+            font-family: 'digital-7';
+            src: url('static/digital-7 (mono).ttf');
+        }
+    </style>
+</head>
+
+<body>
+    <calc-app>
+    </calc-app>
+
+    <script src="calculator.js"></script>
+    <script src="components/CalculatorApp.js"></script>
+    <script src="components/CalculatorDisplay.js"></script>
+    <script src="components/CalculatorControls.js"></script>
+
+    <script>
+        const c = new Calculator((text) => document.querySelector('#display').innerHTML = text);
+    </script>
+</body>
+
+</html>
