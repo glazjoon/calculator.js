@@ -1,15 +1,11 @@
 class Calculator {
 
-    currentValue = '0';
-    firstOperand = '';
-
-    previousOperationType = null;
-    previousSumOperation = null;
-
-    operator = null;
-
     constructor(printFn) {
-        this.print = printFn;
+        this.print = (text) => {
+            this.currentlyPrintedValue = text;
+            printFn(text);
+        };
+        this.clear();
     }
 
     add() {
@@ -20,6 +16,23 @@ class Calculator {
         return function (...args) {
             return fn(...args, ...boundArgs);
         };
+    }
+
+    clear() {
+        this.currentlyPrintedValue = '0';
+        this.currentValue = '0';
+        this.firstOperand = '';
+        this.previousOperationType = null;
+        this.previousSumOperation = null;
+        this.operator = null;
+        this.memory = 0;
+
+        this.print(this.currentValue);
+    }
+
+    clearEntry() {
+        this.currentValue = '0';
+        this.print(this.currentValue);
     }
 
     dec() {
@@ -38,6 +51,23 @@ class Calculator {
 
     exp() {
         return this.setOperator((a, b) => a ** b);
+    }
+
+    memAdd() {
+        this.memory += parseFloat(this.currentlyPrintedValue);
+    }
+
+    memSub() {
+        this.memory -= parseFloat(this.currentlyPrintedValue);
+    }
+
+    memRead() {
+        this.currentValue = this.memory;
+        this.print(this.currentValue);
+    }
+
+    memClear() {
+        this.memory = 0;
     }
 
     mul() {

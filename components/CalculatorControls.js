@@ -58,18 +58,18 @@ class CalculatorControls extends HTMLElement {
     render() {
         const buttonSchema = [
             [
-                { val: 'MR', fn: () => { } },
-                { val: 'MC', fn: () => { } },
-                { val: 'M+', fn: () => { } },
-                { val: 'M-', fn: () => { } },
-                { val: 'C', fn: () => { } },
+                { val: 'MR', fn: this.calc.memRead },
+                { val: 'MC', fn: this.calc.memClear },
+                { val: 'M+', fn: this.calc.memAdd },
+                { val: 'M-', fn: this.calc.memSub },
+                { val: 'C', fn: this.calc.clear },
             ],
             [
                 { val: '1' },
                 { val: '2' },
                 { val: '3' },
                 { val: '÷', fn: this.calc.div },
-                { val: 'CE', fn: () => { } },
+                { val: 'CE', fn: this.calc.clearEntry },
             ],
             [
                 { val: '4' },
@@ -121,7 +121,6 @@ class CalculatorControls extends HTMLElement {
                     }
 
                     button.addEventListener('click', function (e) {
-                        e.target.className += ' activeOperation';
                         b.fn.call(self.calc);
                     });
                 } else {
